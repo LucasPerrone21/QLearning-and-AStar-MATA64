@@ -18,14 +18,16 @@ def run():
 
 
     # CONFIGURAÇÕES DO TREINAMENTO
-    episodes = 500 # número de episódios
+    episodes = 30000 # número de episódios
 
-    alpha = 0.3 # taxa de aprendizado
-    gamma = 0.9 # fator de desconto
+    alpha = 0.5 # taxa de aprendizado
+    gamma = 0.5 # fator de desconto
 
     epsilon = 1 # taxa de exploração
-    epsilon_decay = 0.0001 # decaimento da taxa de exploração
+    epsilon_decay = epsilon/(episodes/2) # decaimento da taxa de exploração
     random_factor = np.random.default_rng() # fator de aleatoriedade
+
+    totalReward = 0
 
     for currentEpisode in range(episodes):
         state = env.reset()[0] 
@@ -33,6 +35,7 @@ def run():
         truncated = False   # Se o episódio foi interrompido por limite de passos
 
         while not terminated and not truncated:
+            # Alternar entre Exploration e Exploitation
             if random_factor.random() < epsilon:
                 action = env.action_space.sample() # ações 0 = esquerda, 1 = baixo, 2 = direita, 3 = cima
             else:
@@ -50,16 +53,15 @@ def run():
 
             # Atualiza a tabela Q
             qTable[state, action] = ((1-alpha) * qTable[state, action]) + alpha * (reward + (gamma * np.max(qTable[new_state,:])))
-            #qTable[state, action] + alpha * (reward + gamma * np.max(qTable[new_state,:]))# - qTable[state, action])
+            
+            totalReward += reward
 
             state = new_state
     
-            epsilon = max(epsilon - epsilon_decay, 0)
-
-            if(epsilon==0):
-                alpha = 0.0001
-        #env.close()
+            epsilon = max(epsilon - epsilon_decay, 0.01)
 
 
-    print(qTable)   
+
+    print(qTable)
+    print(f'Taxa de Aproveitamento: {totalReward/episodes*100:.2f}%')
 run()
