@@ -3,4 +3,4 @@
 
  Para utilizar o A* basta rodar o código do arquivo ```A-star.py``` com o python instalado.
 
- Para usar o Q-Learning será necessario instalar uma biblioteca, o Gymnasium API da OpenAI ```pip install gymnasium```. Após isso, basta executar o código e ele mostrará a Q-Table. 
+ Para usar o Q-Learning será necessario instalar uma biblioteca, o Gymnasium API da OpenAI ```pip install gymnasium```. Após isso, basta executar o código do arquivo ```Q-learning2.py``` e ele mostrará a Q-Table. 
